@@ -4,3 +4,9 @@
 ---
 
 ## Summary
+- Reflexion is a method to create and manage episodic memory
+- It uses verbal self reflection to create episodic memory
+- This involves using three models:
+	1. Actor: The model that generates actions and text
+	2. Evaluator: Evaluates the generated output. takes in the generated trajectory. 
+	3. Self-reflection: An LLM instance that generates verbal reflections. Given a sparse reward signal, such as a binary success status (success/fail), the current trajectory, and its persistent memory mem, the self-reflection model generates nuanced and specific feedback. This feedback, which is more informative than scalar rewards, is then stored in the agent’s memory
