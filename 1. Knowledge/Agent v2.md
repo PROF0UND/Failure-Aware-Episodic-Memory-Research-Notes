@@ -4,6 +4,9 @@ The [[Agent v2]] will be used as the baseline model. v2 is the right foundation 
 # Running a challenge:
 Take a look at the [[Choosing a Challenge]] document to see more instructions on the type of challenges. [[Chosen Challenges]] outlines the specific challenges that the agent will be tested on.
 
+---
+# Plan:
+You take the Docker challenge containers from cybench (just the vulnerable web apps), run them locally, and point your own LangChain agent at them. You ignore cybench's agent/evaluation code entirely.
 
 
 
