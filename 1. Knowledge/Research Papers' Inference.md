@@ -35,9 +35,6 @@ class FailureMemoryEntry:
 ```
 
 And the memory store itself:
-
-python
-
 ```python
 class FAEMMemory(BaseMemory):
     def __init__(self):
@@ -60,3 +57,28 @@ class FAEMMemory(BaseMemory):
     def reset(self):
         self.entries = []
 ```
+---
+## Reflection Prompt Template
+Adapted from Reflexion (Shinn et al. 2023) for pentesting context.
+Output is free-form prose (2-3 sentences), not JSON.
+Stored in FailureMemoryEntry.reflection field.
+
+```
+You are a penetration testing assistant reviewing a failed action.
+
+Phase: {phase}
+Command attempted: {action}
+Output received: {outcome}
+
+In 2-3 sentences, explain:
+1. Why this action failed
+2. What specific pattern to avoid repeating
+3. What to try instead
+
+Be concrete. Reference the exact command syntax or flag that caused the failure.
+```
+
+## Key Novelty Over Reflexion
+- Reflexion: stores prose reflection only
+- FAEM: prose reflection + structured metadata (phase, action, step)
+- Enables phase-filtered retrieval — Reflexion cannot do this
