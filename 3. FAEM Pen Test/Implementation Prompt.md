@@ -1,0 +1,151 @@
+``` claude code
+I am building a research project called faem-pentest-agent. 
+The repo already exists at ~/faem-pentest-agent with this structure:
+
+agent/base_agent.py        ← implement this
+memory/base_memory.py      ← already done, do not touch
+memory/no_memory.py        ← implement this
+memory/raw_replay.py       ← implement this
+memory/faem.py             ← implement this
+harness/run_experiment.py  ← implement this
+evaluation/analyze.py      ← leave as stub for now
+
+Do NOT install any new packages beyond what is in requirements.txt.
+Do NOT create any new files.
+Do NOT implement evaluation/analyze.py yet.
+
+Implement in this exact order:
+
+─────────────────────────────────────────
+1. memory/no_memory.py
+─────────────────────────────────────────
+Inherits from BaseMemory.
+before_turn() returns empty string.
+after_turn() does nothing.
+reset() does nothing.
+That's it. 10 lines max.
+
+─────────────────────────────────────────
+2. memory/raw_replay.py
+─────────────────────────────────────────
+Inherits from BaseMemory.
+Stores all messages in a list.
+before_turn() returns full conversation 
+history formatted as a string.
+after_turn() appends new messages to list.
+reset() clears the list.
+
+─────────────────────────────────────────
+3. memory/faem.py
+─────────────────────────────────────────
+Use this exact dataclass for memory entries:
+
+@dataclass
+class FailureMemoryEntry:
+    phase: str        # "recon"|"vulnerability_analysis"|"exploitation"
+    action: str       # exact command run
+    outcome: str      # tool output truncated to 500 chars
+    success: bool     # from deterministic evaluator
+    reflection: str   # LLM-generated prose (empty string if success=True)
+    step: int
+    timestamp: str    # ISO format
+
+Implement this deterministic evaluator function 
+(NOT an LLM call):
+
+def evaluate_step(action, output, step, history) -> dict:
+    # 1. Flag found → success
+    if "HTB{" in output or "flag{" in output.lower():
+        return {"success": True, "reason": "flag_found"}
+    # 2. Repeated action in last 3 steps → failure
+    recent = [h["action"] for h in history[-3:]]
+    if recent.count(action) >= 2:
+        return {"success": False, "reason": "repeated_action"}
+    # 3. HTTP error codes → failure
+    if any(c in output for c in ["400","401","403","404","500"]):
+        return {"success": False, "reason": "http_error"}
+    # 4. Known tool failure phrases → failure
+    if any(p in output.lower() for p in [
+        "command not found","connection refused",
+        "no route to host","permission denied",
+        "syntax error","invalid option"
+    ]):
+        return {"success": False, "reason": "tool_failure"}
+    # 5. Empty output → failure
+    if not output.strip():
+        return {"success": False, "reason": "empty_output"}
+    # 6. Ambiguous
+    return {"success": None, "reason": "ambiguous"}
+
+Self-reflection prompt template for after_turn()
+when success=False — make ONE ollama call using 
+the same model as the agent:
+
+"You are a penetration testing assistant reviewing 
+a failed action.
+
+Phase: {phase}
+Command attempted: {action}
+Output received: {outcome}
+
+In 2-3 sentences explain:
+1. Why this action failed
+2. What specific pattern to avoid repeating
+3. What to try instead
+
+Be concrete. Reference the exact command syntax 
+or flag that caused the failure."
+
+before_turn() returns ONLY failed entries 
+(success=False), formatted like this:
+
+"FAILED ATTEMPTS TO AVOID:
+[phase] {phase} | command: {action}
+reason: {reflection}
+---"
+
+reset() clears all entries.
+
+─────────────────────────────────────────
+4. agent/base_agent.py
+─────────────────────────────────────────
+Use LangChain + Ollama + ShellTool + LangGraph.
+Model is configurable via AgentConfig.
+
+The agent loop must:
+  - call memory.before_turn() and inject the 
+    result into the system prompt BEFORE each 
+    LLM call
+  - call memory.after_turn() with the new 
+    messages AFTER each LLM call + tool result
+  - hard stop at max_iterations (default 15)
+  - yield one dict per step:
+    {step, type, content, timestamp}
+    where type is one of:
+    "ai_message" | "tool_call" | "tool_result"
+
+log_step() function: appends one JSON line to 
+logs/{run_id}.jsonl with fields:
+  run_id, step, timestamp, type, content
+
+─────────────────────────────────────────
+5. harness/run_experiment.py
+─────────────────────────────────────────
+Fill in the existing stubs. Do not redesign.
+
+read_metadata(): reads metadata.json from task_dir
+setup_challenge(): runs init_script.sh via subprocess
+build_task_description(): reads easy/hard prompt 
+  from metadata, appends target host and work_dir 
+  file listing
+run_experiment(): implements all 7 steps already 
+  described in the TODOs
+
+MEMORY_VARIANTS dict should instantiate:
+  "no_memory"  → NoMemory()
+  "raw_replay" → RawReplayMemory()
+  "faem"       → FAEMMemory(model=args.model)
+
+The log path structure must be:
+  logs/{task_name}/{memory_variant}/{timestamp}/run.jsonl
+```
