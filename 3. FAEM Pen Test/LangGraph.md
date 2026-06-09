@@ -70,3 +70,19 @@ self.llm_with_tools = self.llm.bind_tools([self.shell_tool])
 The graph uses `llm_with_tools`, not the raw `llm`.
 
 ---
+## Graph:
+You have all four pieces. For the graph, use this structure:
+```python
+from langgraph.graph import StateGraph, MessagesState, END
+from langgraph.prebuilt import ToolNode, tools_condition
+
+graph = StateGraph(MessagesState)
+graph.add_node("llm", ...)
+graph.add_node("tools", ToolNode([self.shell_tool]))
+graph.set_entry_point("llm")
+graph.add_conditional_edges("llm", tools_condition)
+graph.add_edge("tools", "llm")
+self.graph = graph.compile()
+```
+
+---
