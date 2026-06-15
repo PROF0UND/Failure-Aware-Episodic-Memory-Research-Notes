@@ -2,4 +2,5 @@ The system prompt includes explicit instructions to avoid blocking network comma
 
 Built using [[LangGraph]]
 
-The agent loop needs its own separate message list for a different reason: to pass to LangGraph each turn so the LLM has conversation context.
+If the agent retains full conversation history regardless of memory condition, the memory system becomes redundant — the LLM already has access to everything. Option B ensures the memory variant is the only source of inter-turn context, making the comparison meaningful.
+
