@@ -14,8 +14,6 @@ With Docker you just run one command and it spins up the entire thing instantly,
 Image: snapshot of the filesystem
 Container: running instance of the image
 
-
-
 ---
 
 # Useful Commands:
