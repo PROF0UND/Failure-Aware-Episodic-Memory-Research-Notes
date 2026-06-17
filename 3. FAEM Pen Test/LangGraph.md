@@ -105,4 +105,12 @@ Types:
 	1. tracks the ongoing conversation by maintaining message history within a session
 	2. Short-term memory updates when the graph is invoked or a step is completed, and the State is read at the start of each step.
 	3. Thread id is just the name given to a specific short term memory line so that it can be classified from other short term memory threads
-2. Long term memory
+2. Long term memory:
+	1. remembered across sesssions
+
+---
+## Reducers:
+- A reducer just says: "when a node returns a new value for this field, here's how to combine it with whatever's already there.
+- Without one, the default is overwrite
+- `add_messages` is the reducer you're using on your `messages` field, and it does something more specific than plain append. Its actual logic: for each message in the new batch, check if it has the same `id` as a message already in the existing list. If it does, replace that message in place. If it doesn't, append it as new. So "append" is really "append, unless you're explicitly updating something that's already there by id."
+- 
