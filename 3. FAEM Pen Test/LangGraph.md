@@ -96,6 +96,8 @@ self.graph = graph.compile()
 [Documentation](https://docs.langchain.com/oss/python/langgraph/checkpointers#checkpoints)
 
 - A checkpoint is a snapshot of the graph state saved at each [super-step](https://docs.langchain.com/oss/python/langgraph/checkpointers#super-steps) and is represented by a `StateSnapshot` object
+- This will probably replace the raw_replay functionality
+- 
 
 ---
 ## Memory:
@@ -113,4 +115,3 @@ Types:
 - A reducer just says: "when a node returns a new value for this field, here's how to combine it with whatever's already there.
 - Without one, the default is overwrite
 - `add_messages` is the reducer you're using on your `messages` field, and it does something more specific than plain append. Its actual logic: for each message in the new batch, check if it has the same `id` as a message already in the existing list. If it does, replace that message in place. If it doesn't, append it as new. So "append" is really "append, unless you're explicitly updating something that's already there by id."
-- 
