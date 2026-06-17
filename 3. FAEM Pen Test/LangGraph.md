@@ -104,4 +104,5 @@ Types:
 1. Short term memory: 
 	1. tracks the ongoing conversation by maintaining message history within a session
 	2. Short-term memory updates when the graph is invoked or a step is completed, and the State is read at the start of each step.
+	3. Thread id is just the name given to a specific short term memory line so that it can be classified from other short term memory threads
 2. Long term memory
