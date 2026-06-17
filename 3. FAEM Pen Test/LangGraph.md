@@ -86,4 +86,22 @@ self.graph = graph.compile()
 ```
 
 ---
+## Invoke:
+- One `.invoke()` call = one full pass through the graph, start to finish
+- `.invoke()` returns the final accumulated state dict
+- each `.invoke()` is independent unless you wire in a checkpointer and thread_id
+
+---
+## Checkpointers:
+[Documentation](https://docs.langchain.com/oss/python/langgraph/checkpointers#checkpoints)
+
+- A checkpoint is a snapshot of the graph state saved at each [super-step](https://docs.langchain.com/oss/python/langgraph/checkpointers#super-steps) and is represented by a `StateSnapshot` object
+
+---
 ## Memory:
+[Documentation](https://docs.langchain.com/oss/python/concepts/memory)
+Types:
+1. Short term memory: 
+	1. tracks the ongoing conversation by maintaining message history within a session
+	2. Short-term memory updates when the graph is invoked or a step is completed, and the State is read at the start of each step.
+2. Long term memory
