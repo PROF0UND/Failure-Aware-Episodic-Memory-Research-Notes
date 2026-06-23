@@ -99,3 +99,12 @@ The agent's reflections are locally rational but globally stuck because:
 - No tool diversity — `sqlmap` would have solved this in one step, but the agent only reaches for `curl`
 
 This could be a strong motivation section in your paper for why failure-aware episodic memory needs to be paired with a **strategic planner layer**, not just a reflection injector.
+
+---
+## Possible Solutions:
+1. Have a failure counter:
+	1. Checks the past failures too see a pattern and suggest new ways or trigger phase switch
+	2. If the last N retrieved episodes for this task share the same `failure_reason`, inject a meta-memory: _this approach is exhausted, switch phase_
+2. Classify episodes into attempts and dead ends.
+	1. `attemp_episode`: What was tried and what happened.
+	2. 
