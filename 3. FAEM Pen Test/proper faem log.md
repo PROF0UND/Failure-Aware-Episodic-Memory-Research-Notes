@@ -107,4 +107,4 @@ This could be a strong motivation section in your paper for why failure-aware ep
 	2. If the last N retrieved episodes for this task share the same `failure_reason`, inject a meta-memory: _this approach is exhausted, switch phase_
 2. Classify episodes into attempts and dead ends.
 	1. `attemp_episode`: What was tried and what happened.
-	2. 
+	2. `dead_end_episode`: The sub approach should be discarded.
