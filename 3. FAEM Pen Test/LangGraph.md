@@ -115,3 +115,16 @@ Types:
 - A reducer just says: "when a node returns a new value for this field, here's how to combine it with whatever's already there.
 - Without one, the default is overwrite
 - `add_messages` is the reducer you're using on your `messages` field, and it does something more specific than plain append. Its actual logic: for each message in the new batch, check if it has the same `id` as a message already in the existing list. If it does, replace that message in place. If it doesn't, append it as new. So "append" is really "append, unless you're explicitly updating something that's already there by id."
+
+---
+## Context:
+### Inspecting state directly from the checkpointer:
+Using `InMemorySaver`, you can dump the full message list at any step:
+```python
+# after a step runs
+state = app.get_state(config={"configurable": {"thread_id": thread_id}})
+for msg in state.values["messages"]:
+    print(f"[{msg.type}] {msg.id}: {msg.content[:200]}")
+```
+This shows you every message in the graph's state, in order, with their IDs — so you can verify `id="system_prompt"` is being mutated correctly and `id="dead_end_memory"` is appending last.
+
