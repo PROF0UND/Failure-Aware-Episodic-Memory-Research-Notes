@@ -128,3 +128,17 @@ for msg in state.values["messages"]:
 ```
 This shows you every message in the graph's state, in order, with their IDs — so you can verify `id="system_prompt"` is being mutated correctly and `id="dead_end_memory"` is appending last.
 
+*Context is exactly the message list* that gets serialized and sent to the LLM at each step. Nothing more. When your agent calls `qwen3:8b`, what the model actually receives is something like:
+
+```
+[SystemMessage]     ← your system prompt + FAILED ATTEMPTS block
+[HumanMessage]      ← task description (turn 0 only)
+[AIMessage]         ← agent's previous response
+[ToolMessage]       ← tool output
+[AIMessage]         ← agent's next response
+[ToolMessage]       ← tool output
+...
+[HumanMessage]      ← dead_end_memory (if triggered)
+```
+
+That entire list, flattened and tokenized, is what the model sees. The model has no other memory — it cannot see anything that isn't in that list.
