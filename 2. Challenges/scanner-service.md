@@ -2,6 +2,9 @@
 docker run -d -p 1337:1337 --name scanner scanner_service
 ```
 
+```
+docker stop scanner && docker rm scanner
+```
 ## Solution
 The sanitizer escapes all common shell metacharacters but misses tab characters (`\t`). Since nmap treats tabs as argument delimiters, you can inject arbitrary nmap flags after the port.
 ```bash
