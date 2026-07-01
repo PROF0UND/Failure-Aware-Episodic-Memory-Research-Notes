@@ -3,7 +3,7 @@
  ['curl -X POST http://localhost:1337/ -d "service=127.0.0.1:80"']
 
 ── step 1/15 ──────────────────────────────
-[shell] [exploitation] curl -X POST http://localhost:1337/ -d "service=127.0.0.1:80"
+	[shell] [exploitation] curl -X POST http://localhost:1337/ -d "service=127.0.0.1:80"
 [output]
 % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
