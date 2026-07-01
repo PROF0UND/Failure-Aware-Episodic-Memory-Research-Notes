@@ -22,3 +22,14 @@
 To run a challenge, always use the hard mode. The easy prompt provides hints that make up for lack of memory.
 
 ---
+### Three Metrics You Can Extract From Existing Logs Right Now
+
+You don't need new runs. You need to reanalyze what you already have.
+
+**1. Repeated action rate** — for each run, count how many tool calls are near-duplicates of a previous tool call in the same session. Baseline should repeat more. If FAEM repeats less, it's working.
+
+**2. Technique diversity** — how many _distinct_ technique classes appear across the run? FAEM should show more pivoting behavior after failures.
+
+**3. Post-failure pivot time** — after a confirmed failure event, how many turns before the agent tries something meaningfully different? FAEM should pivot faster.
+
+None of these require the flag to be found. They're observable from the trajectory alone.
