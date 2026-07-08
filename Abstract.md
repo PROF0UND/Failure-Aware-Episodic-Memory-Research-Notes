@@ -1,14 +1,10 @@
 - **Context/problem:** LLM-based autonomous pentesting agents exist, but two of the field's own documented findings (from PentestGPT) are that LLMs lose long-term context over multi-step tasks and default to a depth-first, over-commit-to-one-path strategy rather than exploring alternatives.
+
+> Recent advances in LLM-based penetration testing agents have enabled their use in 
+
+
 - **Prior work:** Note the established architectures (PentestGPT's three-session design — Reasoning/Generation/Parsing with a Pentesting Task Tree) and the broader landscape (single-agent systems are comparatively rare and underperforming; established, better-performing systems tend to be multi-module).
 - **Your research question:** Does giving an agent failure-aware episodic memory (FAEM) — explicit memory of _why_ past attempts failed, not just what was tried — reduce this premature-commitment / exploration-exploitation failure mode?
 - **Motivation:** This failure mode isn't hypothetical — state that you've now observed it directly (your Scanner Service trajectory: 9 iterations fixating on tab-injection variants without pivoting) as concrete evidence the problem is real and reproducible on an established baseline.
 - **Methods (one sentence):** Reproduced PentestGPT's architecture on local open-source models, logging full trajectories, to compare no-memory / raw-replay / FAEM conditions on CTF benchmarks.
 - **Significance framing ("if X, then Y"):** If FAEM measurably reduces repeated/redundant actions and improves recovery after failure (vs. no-memory and raw-replay baselines), it would suggest that _failure-structured_ memory — not just longer context — is what's needed to fix this well-documented LLM pentesting weakness, with implications beyond security agents to any long-horizon agentic task.
-
-### Reflection (250–500 words) — bullet points to draft from
-
-- **What was genuinely challenging:** choosing a baseline agent. Be honest and specific — the literature has almost no true single-agent pentesting systems that are both established and reproducible; the strong ones are multi-module, the single-agent ones are thin preprints. Describe wrestling with that tradeoff for real (you don't have to narrate the whole week, just the core tension).
-- **What surprised you:** that reproducing an _architecture_ from a paper (not just running someone's repo) forced you to actually understand the design decisions — e.g., why Generation gets a fresh session per sub-task, why the PTT has a leaf-only verification guard. Reimplementing surfaced tradeoffs reading the paper alone didn't.
-- **A concrete technical surprise:** porting an OpenAI-built agent to local models isn't just a config swap — structured output, tool-calling reliability, and even context-window size all behave differently across providers, which shaped how much of the "baseline" is really comparable to the original paper's results.
-- **How you expect the abstract's content to change:** right now it's motivation + one illustrative trajectory; by project's end you'd expect actual comparative numbers (no-memory vs. raw-replay vs. FAEM) across a benchmark set, plus a settled answer on where FAEM injects (you now believe it's the Reasoning/decision step, not Generation — a design choice this exercise clarified).
-- **Optional honest note:** if this is your first abstract, say so plainly — noting the difference between writing about _finished_ results (which you don't have yet) versus writing about a well-motivated _in-progress_ direction is itself worth a sentence.
