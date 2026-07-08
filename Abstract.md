@@ -13,7 +13,7 @@
 
 - **Motivation:** This failure mode isn't hypothetical — state that you've now observed it directly (your Scanner Service trajectory: 9 iterations fixating on tab-injection variants without pivoting) as concrete evidence the problem is real and reproducible on an established baseline.
 
-> 
+> AI models have advanced quite a bit, however, their performance in penetration testing tasks still remains underwhelming. Tests conducted on benchmark penetration testing frameworks revealed agents are very succpetable to over-commiting to a stratergy before pivoti 
 
 - **Methods (one sentence):** Reproduced PentestGPT's architecture on local open-source models, logging full trajectories, to compare no-memory / raw-replay / FAEM conditions on CTF benchmarks.
 
