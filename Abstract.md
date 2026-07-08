@@ -5,7 +5,7 @@
 
 - **Prior work:** Note the established architectures (PentestGPT's three-session design — Reasoning/Generation/Parsing with a Pentesting Task Tree) and the broader landscape (single-agent systems are comparatively rare and underperforming; established, better-performing systems tend to be multi-module).
 
->  
+> Existing work has 
 
 - **Your research question:** Does giving an agent failure-aware episodic memory (FAEM) — explicit memory of _why_ past attempts failed, not just what was tried — reduce this premature-commitment / exploration-exploitation failure mode?
 - **Motivation:** This failure mode isn't hypothetical — state that you've now observed it directly (your Scanner Service trajectory: 9 iterations fixating on tab-injection variants without pivoting) as concrete evidence the problem is real and reproducible on an established baseline.
