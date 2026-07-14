@@ -1,0 +1,8 @@
+- A:
+	- mt: missing tool
+	- te: tool error
+	- eo: empty output
+- B:
+	- rsub: repeated subtask
+	- rcmd: repeated command
+	- 
