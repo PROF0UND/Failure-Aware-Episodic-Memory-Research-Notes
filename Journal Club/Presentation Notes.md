@@ -144,7 +144,7 @@ Table 4, causes across 195 trials:
 
 - Table 3: operations prompted that appear in no walkthrough.
 - **235 brute-force attempts across three models. None on a solution path.**
-- GPT-4 is the worst offender (92) despite being the strongest model — capability doesn't fix the prior.
+- GPT-4 is the worst offender (92) despite being the strongest model, indicating that capability doesn't fix this failure method.
 - Authors' explanation: enterprise breach reports over-represent password cracking, so models learned it as a default move.
 - **What this actually is:** the agent repeatedly re-attempting a technique class that has already failed. Not a knowledge gap — a memory gap.
 - This table is the most useful thing in the paper for me: it quantifies redundant exploration _at the technique-class level_, which is exactly what FAEM suppresses.
@@ -157,7 +157,7 @@ Table 4, causes across 195 trials:
 - **Reasoning — the team lead.** Holds the whole testing context in a Pentesting Task Tree. Updates, verifies, picks the next sub-task by expected payoff. → Findings 3 & 4.
 - **Generation — the junior tester.** Fresh session per sub-task. Expands to steps via chain-of-thought, then to exact commands. Session isolation keeps global context out so it can focus. → Finding 5.
 - **Parsing — the intern.** Condenses tool output, HTTP pages, source code, user intent. Four input types, each with its own prompt. GPT-4 code interpreter for source.
-- CoT throughout. ~1,900 LoC Python + 740 lines of prompts.
+- CoT (prompting the model to produce intermediate reasoning steps rather than jumping to an answer.) throughout. ~1,900 LoC Python + 740 lines of prompts.
 - Preview: the ablation will show Reasoning is load-bearing and the other two are close to optional.
 
 Design alternatives they considered and rejected (worth 20 seconds — shows the design isn't arbitrary):
