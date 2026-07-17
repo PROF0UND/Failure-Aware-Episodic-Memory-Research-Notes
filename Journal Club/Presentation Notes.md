@@ -57,13 +57,6 @@ _(your draft, kept)_
 - **Progressive scoring is the real novelty.** Prior benchmarks recorded root-or-not, which threw away most of the signal.
 - Deliberately excludes benign targets → no false-positive measurement. PentestGPT can tell you the agent found a real vuln; it can't tell you whether the agent _invents_ vulns that don't exist. If you never present a clean target, you never observe a false positive, because reporting "SQL injection here" is always at least potentially right. They acknowledge this; the goal is finding true vulns.
 
-Critical note (worth raising here, briefly):
-
-- §3.2 says the complete sub-task list is in Appendix Table 7. Table 7's own caption says "Summarized 26 **types**" — a taxonomy of categories, not the 182 concrete items.
-- The 182 were supposedly on the project website: reference [32], an `anonymous.4open.science` link titled "EXCALIBUR-Automated-Penetration-Testing" — the anonymized submission URL under the tool's pre-rename name.
-- I checked the GitHub repo's full tree: no benchmark directory, no walkthroughs, no sub-task list. The repo is the tool only.
-- So: the benchmark's _design_ is the contribution; the artifact you'd need to reproduce their numbers isn't published. The artifact award was for the tool, not the benchmark.
-- (Minor: Figure 7 still labels the system "Excalibur." Footnote 1's "PentestGPT is King Arthur's legendary sword" only parses if you know the old name.)
 
 **Q&A prep:** "Is 13 targets enough to support percentages quoted to one decimal place?" — no, and I'd say so.
 
@@ -89,7 +82,7 @@ Their claimed fairness controls: expert-level testers so commands are executed c
 - Appendix A explicitly claims "the human tester does not provide any expert knowledge." That contradicts §4.2 directly.
 - What's measured is **LLM + OSCP expert**, not LLM.
 
-**Be fair about it:** the confound hits the baselines and PentestGPT alike, so the _relative_ deltas partly survive. What doesn't survive is the absolute claim that this measures innate LLM capability. That's the honest version of the critique and it's more defensible than "the results are wrong."
+This setup hits the baselines and PentestGPT alike, so the _relative_ deltas partly survive. What doesn't survive is the absolute claim that this measures innate LLM capability. That's the honest version of the critique and it's more defensible than "the results are wrong."
 
 **Q&A prep:** if someone says "but they controlled for that" — they _asserted_ it, they didn't control for it. Point at §4.2 vs Appendix A.
 
@@ -112,12 +105,11 @@ Their claimed fairness controls: expert-level testers so commands are executed c
 Table 4, causes across 195 trials:
 
 - **Finding 3 — no long-term memory. 74 trials, top cause.**
-    - Models lose awareness of earlier results. Fixed token window; a single dirbuster dump runs to thousands of tokens.
+    - This causes models to lose awareness of earlier results. Fixed token window; a single tool output runs to thousands of tokens.
     - Matters because linking vulns across services is how you actually root a box.
 - **Finding 4 — recency bias, forced depth-first. 45 deadlocks.**
     - Models fixate on the most recent turn, rarely branch until a path is exhausted.
     - Authors tie this to attention concentrating at prompt start and end (their refs 42–43).
-    - Combined with context loss: anchor on one service, forget prior discoveries, impasse.
     - Contrast: human testers plot moves by expected payoff across the whole target.
 - **Finding 5 — hallucinated operations. 55 false commands.**
     - Right tool, wrong flags. Sometimes invented tools and modules that don't exist.
@@ -135,8 +127,7 @@ Table 4, causes across 195 trials:
 - **235 brute-force attempts across three models. None on a solution path.**
 - GPT-4 is the worst offender (92) despite being the strongest model, indicating that capability doesn't fix this failure method.
 - Authors' explanation: enterprise breach reports over-represent password cracking, so models learned it as a default move.
-- **What this actually is:** the agent repeatedly re-attempting a technique class that has already failed. Not a knowledge gap — a memory gap.
-- This table is the most useful thing in the paper for me: it quantifies redundant exploration _at the technique-class level_, which is exactly what FAEM suppresses.
+- This is a memory gap not a knowledge gap. the agent repeatedly re-attempting a technique class that has already failed.
 
 ---
 
