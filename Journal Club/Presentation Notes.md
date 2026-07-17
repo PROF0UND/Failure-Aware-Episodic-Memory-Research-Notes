@@ -88,7 +88,9 @@ This setup hits the baselines and PentestGPT alike, so the _relative_ deltas par
 
 ---
 
-## Slide 5 (deck 7) — What LLMs do well (Findings 1–2) — **2.5 min**
+## Slide 5 (deck 7) — What LLMs do well (Findings 1–2) — 
+
+**2.5 min**
 
 - **Finding 1:** all three models complete at least one end-to-end test. GPT-4 clears 4 easy + 1 medium. Bard 2 easy, GPT-3.5 1 easy.
 - Sub-tasks: GPT-4 does 55/77 easy, 30/71 medium. Average 52.2% vs 23.1% (GPT-3.5) and 27.5% (Bard).
