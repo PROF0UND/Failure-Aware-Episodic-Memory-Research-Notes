@@ -1,12 +1,12 @@
-|Slides|Time|
-|---|---|
-|1–2 (title, journal info)|2 min|
-|3–4 (motivation, contributions)|4 min|
-|5–6 (benchmark, study design)|6 min — slide 6 will generate questions|
-|7–9 (findings, wasted work)|9 min — your core|
-|10–12 (architecture, PTT, example)|11 min — heaviest section|
-|13–15 (results, ablation, practicality)|8 min|
-|16–17 (critique, my work)|8 min|
+| Slides                                  | Time                                    |
+| --------------------------------------- | --------------------------------------- |
+| 1–2 (title, journal info)               | 2 min                                   |
+| 3–4 (motivation, contributions)         | 4 min                                   |
+| 5–6 (benchmark, study design)           | 6 min — slide 6 will generate questions |
+| 7–9 (findings, wasted work)             | 9 min — your core                       |
+| 10–12 (architecture, PTT, example)      | 11 min — heaviest section               |
+| 13–15 (results, ablation, practicality) | 8 min                                   |
+| 16–17 (critique, my work)               | 8 min                                   |
 
 
 ---
