@@ -8,17 +8,6 @@
 |13–15 (results, ablation, practicality)|8 min|
 |16–17 (critique, my work)|8 min|
 
-# Slide 1:
-- The background problem is that pentesting has traditionally resisted automation. 
-- Requires trained professionals with natural human creativity to switch between tasks
-- While work prior to this paper has suggested that LLMs can facilitate this process, none provided assessments 
-- The paper ventures to address this issue in two ways:
-	- building a benchmark to evaluate models for pentesting
-	- building an architecture that address diagnosed failures.
-
-# Slide 2:
-- The paper provides 3 main contributions:
-	1. The first being the testing benchmark:
 
 ---
 # PentestGPT — Journal Club Talking Points
