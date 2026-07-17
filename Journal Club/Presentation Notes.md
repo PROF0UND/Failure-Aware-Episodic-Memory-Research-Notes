@@ -138,7 +138,7 @@ Table 4, causes across 195 trials:
 - **Generation — the junior tester.** Fresh session per sub-task. Expands to steps via chain-of-thought, then to exact commands. Session isolation keeps global context out so it can focus. → Finding 5.
 - **Parsing — the intern.** Condenses tool output, HTTP pages, source code, user intent. Four input types, each with its own prompt. GPT-4 code interpreter for source.
 - CoT (prompting the model to produce intermediate reasoning steps rather than jumping to an answer.) throughout. ~1,900 LoC Python + 740 lines of prompts.
-- Preview: the ablation will show Reasoning is load-bearing and the other two are close to optional.
+- Althuogh the The ablation will show Reasoning is load-bearing and the other two are close to optional.
 
 Design alternatives they considered and rejected (worth 20 seconds — shows the design isn't arbitrary):
 
