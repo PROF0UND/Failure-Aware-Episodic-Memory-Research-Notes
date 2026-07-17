@@ -179,8 +179,7 @@ Design alternatives they considered and rejected (worth 20 seconds — shows the
 - The verification step is the clever bit: atomic operations should only touch the lowest-level sub-task, so a structural edit means the model hallucinated. Revert and regenerate. Cheap, effective hallucination guard.
 - Active feedback: the tester can hand-edit the PTT in a throwaway session that leaves the main reasoning context untouched.
 
-**Point at node 2.2.1 — "Brute-force (failed)".**
-
+Status labels on failures:
 - The failure is recorded. But it's a status label on one node. Nothing generalises it into "brute-force is unproductive on this target."
 - So the tree knows _that_ this attempt failed, not _what class of thing_ failed. That distinction is the seed of my whole project — I'll come back to it at the end.
 
