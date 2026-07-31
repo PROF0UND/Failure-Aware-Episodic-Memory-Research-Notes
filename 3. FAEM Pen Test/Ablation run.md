@@ -37,3 +37,89 @@
 - **Real classification** (gemma3:4b/ollama) produced a well-formed seed file with reflections + provenance.
 - **Runtime**: disjointness assertion fires on overlap; `live_promotion=False` records attempts but never promotes; phase-filtered `before_turn` shows only matching-phase dead ends.
 - **Live capped run** on PackedAway (disjoint from seed): `faem_dead_ends` held at 9 across all turns (no new promotions), and phase filtering behaved correctly (recon turn → 1 recon dead end; unknown-phase turns → all 9). Test log cleaned up afterward.
+
+---
+
+## Step 0 (prep — optional but recommended)
+
+- **Add retry/backoff around `_generate_reflection`** so the gateway 403 blips don't leave `unclassified` holes in the seed. (One line of the Haiku run already hit this.) Say the word and I'll add it.
+- Decide model: **`Claude Haiku 4.5` / `anthropic`** — clearly better than gemma3:4b for this.
+
+## Step 1 — Fix the 7/14 split
+
+Pick 7 seed + 14 eval task IDs from the 21, **disjoint**. This is your call (the IDs were "to be supplied"). Write the 14 eval ones into a tasklist file of `benchmark/...` paths, e.g. `eval_tasklist.txt`, matching the format in `cybench_tasklist.txt`.
+
+## Step 2 — Build the seed file (from the 7 seed logs only)
+
+```bash
+python -m scripts.build_seed_memory \
+  --seed_logs \
+    "logs_from_baseline/<seed task 1>/pentestgpt/"*.jsonl \
+    ... (the 7 seed logs) ... \
+  --output seed_memory/seed_dead_ends.json \
+  --model "Claude Haiku 4.5" --provider anthropic
+```
+
+The output's `metadata.seed_task_ids` records those 7 — that's what the disjointness guard checks against.
+
+## Step 3 — Inspect the seed (the validation you already started)
+
+Eyeball `seed_dead_ends.json`: technique_class distribution sane? any `unclassified` from 403 fallbacks to re-run? ambiguous warnings acceptable?
+
+## Step 4 — Capped smoke test (1–2 eval tasks, seeded arm)
+
+```bash
+python -m harness.run_experiment \
+  --task_dir "<cybench>/benchmark/.../<an eval task>" \
+  --architecture pentestgpt --memory_variant faem_seeded \
+  --seed_file seed_memory/seed_dead_ends.json \
+  --model "Claude Haiku 4.5" --provider anthropic \
+  --max_iterations 3 --easy_prompt
+```
+
+Confirm (as we did on PackedAway): seeded dead-ends injected, phase-filtered, and `faem_dead_ends` never grows.
+
+## Step 5 — Full 14-task run, **both arms** (28 runs total)
+
+```bash
+# Seeded arm
+python -m harness.run_batch --tasklist eval_tasklist.txt \
+  --architecture pentestgpt --memory_variant faem_seeded \
+  --seed_file seed_memory/seed_dead_ends.json \
+  --model "Claude Haiku 4.5" --provider anthropic
+
+# Control arm — same everything, no seed, live promotion OFF
+python -m harness.run_batch --tasklist eval_tasklist.txt \
+  --architecture pentestgpt --memory_variant faem --live_promotion false \
+  --model "Claude Haiku 4.5" --provider anthropic
+```
+
+They log to different dirs (`pentestgpt_faem_seeded` vs `pentestgpt_faem`), so they won't collide, and the batch-level disjointness guard fails loudly if any eval task is a seed task.
+
+## Step 6 — Analyze
+
+Compare solve rate / iterations-to-solve between arms, plus the re-attempt-of-seeded-dead-class signal (the `reattempt_of_seeded_dead_class` hook stub — I'd finish wiring that over the JSONL logs at this point).
+
+---
+
+### SEED (7) — ~69 failed trajectories total
+
+|category|task|fail-traj|why|
+|---|---|---|---|
+|crypto|diffecient|10|richest crypto|
+|crypto|robust-cbc|9|crypto is the biggest eval category → 3 seeds|
+|crypto|randsubware|9|"|
+|forensics|eval-me|10|richest forensics|
+|web|[Medium] LockTalk|12|richest overall|
+|pwn|network-tools|11|richest pwn|
+|rev|[Easy] Crushing|8|only rich rev log → covers rev for eval|
+
+### EVAL (14)
+
+|category|tasks|
+|---|---|
+|crypto (4)|Dynastic, Primary Knowledge✅, [Medium] Partial Tenacity, [Hard] Permuted|
+|forensics (3)|It Has Begun, Urgent, [Medium] Data Siege|
+|pwn (1)|Delulu|
+|rev (3)|LootStash✅, PackedAway✅, [Hard] FlecksOfGold|
+|web (3)|Flag Command, [Easy] Labyrinth Linguist, chunky|
