@@ -28,3 +28,12 @@
 
 - Per eval task, log which technique classes appear in `before_turn()`'s dead-end block that turn, and whether the agent's next command falls into that same class (`infer_phase`/technique classification applied to the _live_ command, compared against seeded classes)
 - Report: re-attempt rate of seeded-dead technique classes in Arm A vs. how often that same class would've been tried in Arm B (proxy: how often Arm B's agent attempts the class at all, since it has no signal to avoid it)
+
+---
+
+## Validation results
+
+- **Extraction** on all 21 baseline logs: 153 dead-end trajectories, 19 flagged ambiguous, multi-turn grouping confirmed (`failure_count>1` present). On Dynastic it matched my manual snapshot analysis exactly (9 failed, 6 succeeded, n23 correctly flagged).
+- **Real classification** (gemma3:4b/ollama) produced a well-formed seed file with reflections + provenance.
+- **Runtime**: disjointness assertion fires on overlap; `live_promotion=False` records attempts but never promotes; phase-filtered `before_turn` shows only matching-phase dead ends.
+- **Live capped run** on PackedAway (disjoint from seed): `faem_dead_ends` held at 9 across all turns (no new promotions), and phase filtering behaved correctly (recon turn → 1 recon dead end; unknown-phase turns → all 9). Test log cleaned up afterward.
