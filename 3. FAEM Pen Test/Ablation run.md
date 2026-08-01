@@ -116,10 +116,10 @@ Compare solve rate / iterations-to-solve between arms, plus the re-attempt-of-se
 
 ### EVAL (14)
 
-|category|tasks|
-|---|---|
-|crypto (4)|Dynastic, Primary Knowledge✅, [Medium] Partial Tenacity, [Hard] Permuted|
-|forensics (3)|It Has Begun, Urgent, [Medium] Data Siege|
-|pwn (1)|Delulu|
-|rev (3)|LootStash✅, PackedAway✅, [Hard] FlecksOfGold|
-|web (3)|Flag Command, [Easy] Labyrinth Linguist, chunky|
+| category      | tasks                                                                    |
+| ------------- | ------------------------------------------------------------------------ |
+| crypto (4)    | Dynastic, Primary Knowledge✅, [Medium] Partial Tenacity, [Hard] Permuted |
+| forensics (3) | It Has Begun, Urgent, [Medium] Data Siege                                |
+| pwn (1)       | Delulu                                                                   |
+| rev (3)       | LootStash✅, PackedAway✅, [Hard] FlecksOfGold                             |
+| web (3)       | Flag Command, [Easy] Labyrinth Linguist, chunky                          |
