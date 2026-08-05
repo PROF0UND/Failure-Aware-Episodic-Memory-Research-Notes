@@ -11,5 +11,5 @@ The project HAS these baselines to compare.
 3. FAEM: Contribution
 
 His bullet points at the bottom of your notes in [[4. Research Papers]] describe how to the existing baselines in _these papers_ work, so you understand what failure looks like in prior systems before you claim to fix it.
-
+0
 ---
