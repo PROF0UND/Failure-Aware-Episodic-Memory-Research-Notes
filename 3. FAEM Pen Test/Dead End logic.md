@@ -1,0 +1,5 @@
+Right now every failure episode looks identical — just a list of "don't do X" entries. The agent has no way to know when an entire _approach_ is exhausted vs. when a single command failed.
+
+Dead-end logic adds a second episode type. When the same `technique_class` (e.g. "tautology-based SQL bypass") fails `DEAD_END_THRESHOLD = 3` consecutive times, the memory system promotes it to a `dead_end` episode. This triggers a separate, strategically-framed reflection ("this entire approach is exhausted, here's what to try instead") and injects it as a `HumanMessage` with `id="dead_end_memory"` at the end of the context — the highest-attention position — rather than buried in the system prompt with the regular attempt history.
+
+The key distinction: attempt episodes tell the agent "this specific command failed." Dead-end episodes tell the agent "stop trying this class of approach entirely."
